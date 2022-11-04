@@ -35,14 +35,24 @@ function onImageClick(event) {
     return;
   }
 
-  const instance = basicLightbox.create(`
+  const modal = basicLightbox.create(
+    `
     <img src="${event.target.dataset.source}">
-`);
-  instance.show();
+`,
+    {
+      onShow: modal => {
+        document.addEventListener('keydown', onPressEsc);
+      },
+      onClose: modal => {
+        document.removeEventListener('keydown', onPressEsc);
+      },
+    },
+  );
+  modal.show();
 
-  gallery.addEventListener('keydown', event => {
+  function onPressEsc(event) {
     if (event.code === 'Escape') {
-      instance.close();
+      modal.close();
     }
-  });
+  }
 }
